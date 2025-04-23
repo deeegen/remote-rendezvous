@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Remote Rendezvous</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+    }
+    .background-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(120deg, #FA8072 0%, #90369c 100%);
+      mix-blend-mode: overlay;
+      z-index: -1;
+    }
+    .logo {
+      width: 550px;
+      opacity: 0;
+      transform: translateY(-30px);
+      animation: fadeInDown 3s ease-in-out forwards;
+    }
+    
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes extendLine { from { width: 0; } to { width: 200px; } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .divider-container, .button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      opacity: 0;
+      margin-top: 30px;
+      animation: fadeIn 2s ease-in-out forwards;
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+    }
+    .line {
+      width: 0;
+      height: 3px;
+      background: linear-gradient(to right, #FA8072, #c8516c);
+      animation: extendLine 2s ease-in-out forwards;
+    }
+    .circle {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #c8516c, #ed5a5f);
+      opacity: 0;
+      animation: fadeIn 1.5s ease-in-out forwards;
+    }
+    .phrase-container {
+      font-size: 18px;
+      color: #ff6e63;
+      white-space: nowrap;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeIn 1.5s ease-in-out forwards;
+    }
+    button {
+      background: transparent;
+      border: 2px solid;
+      border-image: linear-gradient(to right, #FA8072, #90369c) 1;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: border-image-source 0.3s;
+    }
+    button:hover {
+      background: rgba(250, 128, 114, 0.2);
+      border-image-source: linear-gradient(to left, #FA8072, #90369c);
+    }
+  </style>
+</head>
+<body>
+  <div class="background-overlay"></div>
+  <img src="https://cdn.glitch.global/5970b456-17e9-4f56-b0f2-46f0d4636862/New%20Project%20-%202025-04-03T084355.810.png?v=1743684251173" alt="Logo" class="logo">
+  <div class="divider-container">
+    <div class="divider"><div class="line"></div><div class="circle"></div></div>
+    <div class="phrase-container"><span id="phrase"></span></div>
+    <div class="divider"><div class="circle"></div><div class="line"></div></div>
+  </div>
+  <div class="button-container">
+    <button onclick="window.location.href='pages.html'">Pages</button>
+    <button onclick="window.location.href='about.html'">About me</button>
+    <button onclick="window.location.href='game.html'">Apt. 11</button>
+    <button onclick="window.location.href='page4.html'">Button 4</button>
+  </div>
+
+  <script>
+    function typeWriter(text, i, callback) {
+      if (i < text.length) {
+        document.getElementById("phrase").textContent += text.charAt(i);
+        setTimeout(() => typeWriter(text, i + 1, callback), 100);
+      } else if (callback) callback();
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        document.querySelector(".divider-container").style.opacity = "1";
+      }, 1500);
+      setTimeout(() => {
+        const phrases = ["Bypassing is dead, move on!", "Everything is degen.", "Welcome to our world1111!!1!1"];
+        typeWriter(phrases[Math.floor(Math.random() * phrases.length)], 0);
+      }, 2500);
+    });
+  </script>
+</body>
+</html>
