@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Remote Rendezvous</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #FA8072;
+      --secondary: #90369c;
+      --accent: #ffd700;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      position: relative;
+    }
+
+    .animated-background {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(
+        45deg,
+        var(--primary),
+        var(--secondary),
+        #ff6b6b,
+        var(--secondary)
+      );
+      background-size: 400% 400%;
+      animation: gradientFlow 15s ease infinite;
+      opacity: 0.9;
+    }
+
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .back-button {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid var(--accent);
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-button:hover {
+      background: var(--accent);
+      color: var(--secondary);
+      transform: translateX(10px);
+      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+    }
+
+    .content {
+      text-align: center;
+      padding: 100px 20px 40px;
+      max-width: 1200px;
+    }
+
+    h1 {
+      font-size: 4rem;
+      margin: 0 0 2rem;
+      background: linear-gradient(45deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -2px;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      width: 90%;
+      max-width: 1200px;
+      padding: 30px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 30px;
+      backdrop-filter: blur(12px);
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      transform: translateY(20px);
+      opacity: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      transform: rotate(45deg);
+      transition: all 0.6s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .card:hover::before {
+      animation: shine 1.5s ease;
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--accent);
+    }
+
+    .card p {
+      font-size: 1rem;
+      color: #ddd;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .card button {
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .card button:hover {
+      background: linear-gradient(45deg, var(--secondary), var(--primary));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(250, 128, 114, 0.4);
+    }
+
+    .card button:hover::before {
+      left: 100%;
+    }
+
+    @keyframes shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2.5rem; }
+      .card-container { grid-template-columns: 1fr; }
+      .content { padding: 80px 20px 30px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="animated-background"></div>
+  <button class="back-button" onclick="window.history.back()">← Back</button>
+  
+  <div class="content">
+    <h1>Remote Rendezvous</h1>
+    <div class="card-container">
+      <div class="card">
+        <h2>Page One</h2>
+        <p>This is the first page with some cool features.</p>
+        <button onclick="location.href='page1.html'">Explore Now</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Scroll animation trigger
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.card').forEach((card) => {
+      observer.observe(card);
+    });
+  </script>
+</body>
+</html>
